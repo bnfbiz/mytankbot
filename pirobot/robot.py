@@ -1,17 +1,42 @@
+"""Robot Drive Support
+
+This module provides basic driving support for Raspberry Pi robots, currently the only drive support is for a 
+tank based robot.   It provides the Robot class.
+
+"""
 import RPi.GPIO as GPIO
 import time
 
 class Robot:
+    """Robot Class
+
+    This class supports driving operations for the robot
+    """
+
     def __init__(self):
-        GPIO.setmode(GPIO.BOARD)
+        """Constructor
+
+        Initialize the robot class.  Currently takes no parameters.
+        """
+        GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
     def __del__(self):
+        """Destructor
+
+        Cleanup the robot and GPIO settings
+        """
         self.pwm_lms.stop(0)
         self.pwm_rms.stop(0)
         GPIO.cleanup()
 
     def inittank(self, leftmotor_dict, rightmotor_dict):
+        """Initiailize the tank robot
+
+        Args:
+            leftmotor_dict (dict):  Dictionary containing the Forward, Backward and Speed PINs for the left motor
+            rightmotor_dict (dict): Dictionary containing the Forward, Backward and Speed PINs for the right motor
+        """
         self.lm = leftmotor_dict
         self.rm = rightmotor_dict
         # Setup left motor
@@ -28,8 +53,18 @@ class Robot:
         # set the motors to be off
         self.pwm_lms.start(0)
         self.pwm_rms.start(0)
+        GPIO.output(self.lm["forwardpin"], GPIO.LOW)
+        GPIO.output(self.lm["backwardpin"], GPIO.LOW)
+        GPIO.output(self.rm["forwardpin"], GPIO.LOW)
+        GPIO.output(self.rm["backwardpin"], GPIO.LOW)
 
     def move(self, leftmagnitude, rightmagnitude):
+        """
+
+        Args:
+            leftmagnitude (float):  Magnitude of the left motor (range -100 to 100)
+            rightmagnitude (float): Magnitude of the right motor (range -100 to 100)
+        """
         if leftmagnitude > 0:
             GPIO.output(self.lm["forwardpin"], GPIO.LOW)
             GPIO.output(self.lm["backwardpin"], GPIO.HIGH)
@@ -56,4 +91,3 @@ class Robot:
         rightmagnitude = rightmagnitude if rightmagnitude < 100 else 100
         self.pwm_lms.ChangeDutyCycle(leftmagnitude)
         self.pwm_rms.ChangeDutyCycle(rightmagnitude)
-

@@ -1,13 +1,33 @@
+"""Joystick Support
+
+This module provides joystick support for Raspberry Pi robots.   It provides the Joystick class.
+
+"""
+
 
 import evdev
 
-LX_AXIS=evdev.ecodes.ABS_X
-LY_AXIS=evdev.ecodes.ABS_Y
-RX_AXIS=evdev.ecodes.ABS_RX
-RY_AXIS=evdev.ecodes.ABS_RY
-
 class Joystick:
-    def __init__(self,deviceString = ""):
+    """Joystick Class
+
+    This class supports joystick operations for the robot
+    """
+
+    LX_AXIS=evdev.ecodes.ABS_X
+    LY_AXIS=evdev.ecodes.ABS_Y
+    RX_AXIS=evdev.ecodes.ABS_RX
+    RY_AXIS=evdev.ecodes.ABS_RY
+
+    def __init__(self, deviceString = ""):
+        """Constructor
+        
+        Can be intialized with a component of the device path or string such as 
+        `Logitech Gamepade F710` or substring such as `gamepad`. The device string is converted to lower case
+        for the comparision.
+
+        Args:
+            deviceString (str): The joystick device to initialize
+        """
         devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
         for dev in devices:
             # print(dev.path, dev.name, dev.phys)
@@ -24,20 +44,25 @@ class Joystick:
         print(self.device.name)
 
     def absinfo(self, axis_num):
+        """Returns the AXIS of the ABS Axis number"""
         return self.device.absinfo(axis_num)
 
     def active_keys(self, verbose=False):
+        """Returns the active joystick buttons"""
         return self.device.active_keys()
 
     def capabilities(self, verbose=False, absinfo=True):
+        """Returns the capabilities of the controller"""
         return self.device.capabilities(verbose=verbose, absinfo=absinfo)
 
     def setAxisRange(self, lower_limit=-1, upper_limit = 1, deadband = .1):
+        """Set the axis range of the joystick"""
         self.llimit = lower_limit
         self.ulimit = upper_limit
         self.deadband = deadband
 
     def getAxisValueRange(self, axis):
+        """Gets the axis value mapped to the axis range set by setAxisRange()"""
         actual, min, max, fuzz, flat, res = self.absinfo(axis)
         
         deadband_range = round((max - min)/2 * self.deadband)
@@ -57,3 +82,7 @@ class Joystick:
             # in the deadband range so return the middle of the range requested
             dest_ratio = middle_dest
         return dest_ratio
+
+if __name__ == "__main__":
+    print(__doc__)
+    print(Joystick.__doc__)

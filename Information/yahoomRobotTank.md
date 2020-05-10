@@ -3,17 +3,18 @@
 LED_R = 22
 LED_G = 27
 LED_B = 24
-
 leftBackMotorFwd = 20
 leftBackMotorBck = 21
 rightBackMotorFwD = 19
 rightBackMotorBck = 26
 leftMotorSpeed = 16
 rightMotorSpeed = 13
+UltrasonicServoPin = 23   # ultrasonic
+#Definition of  ultrasonic module pins
+ultrasonic_echo = 0
+ultrasonic_trigger = 1
 
-ServoPin = 23   # ultrasonic
 #Servo pin definition
-FrontServoPin = 23
 ServoUpDownPin = 9
 ServoLeftRightPin = 11
 #TrackSensorLeftPin1 TrackSensorLeftPin2 TrackSensorRightPin1 TrackSensorRightPin2
