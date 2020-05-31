@@ -38,17 +38,15 @@ class Ultrasonic:
         """
         pass
 
-    def init_us(self, echo_pin, trigger_pin, trigger_time = DEFAULT_TRIGGER_TIME, units=UNITS_CM):
+    def init_us(self, ultrasonice_sensor_dict, trigger_time = DEFAULT_TRIGGER_TIME, units=UNITS_CM):
         """Initialize the Ultrasonic Sensor
 
         ARGS
-        echo_pin (Integer):     Pin number for the echo toreturn on
-        trigger_pin (Integer):  Pin number to trigger the echo sequence
-        trigger_time (float):   The time to wait before watching for the echo response.  Default is 0.00002
-        units (string):         The units to measure the distance in, values are "cm" or "in", Default is "cm"
+        ultrasonic_sensor_dict (dict): Dictionary containing the echopin and triggerpin settings
+        trigger_time (float):          The time to wait before watching for the echo response.  Default is 0.00002
+        units (string):                The units to measure the distance in, values are "cm" or "in", Default is "cm"
         """
-        self.echo_pin = echo_pin
-        self.trigger_pin = trigger_pin
+        self.uss = ultrasonice_sensor_dict
         self.trigger_time = trigger_time
         self.us_units = units
         if self.us_units == UNITS_CM:
@@ -57,29 +55,29 @@ class Ultrasonic:
             self.speed_of_sound = SPEED_OF_SOUND_inPerS
 
         # Setup Ultrasonic Sensor
-        GPIO.setup(self.trigger_pin,GPIO.OUT)
-        GPIO.setup(self.echo_pin,GPIO.IN)
+        GPIO.setup(self.uss["triggerpin"],GPIO.OUT)
+        GPIO.setup(self.uss["echopin"],GPIO.IN)
 
         # Initialize to no echoing
-        GPIO.output(self.trigger_pin,GPIO.LOW)
+        GPIO.output(self.uss["triggerpin"],GPIO.LOW)
 
     def GetDistance(self):
         """Returns a float with the distance"""
-        GPIO.output(self.trigger_pin,GPIO.HIGH)
+        GPIO.output(self.uss["triggerpin"],GPIO.HIGH)
         time.sleep(self.trigger_time)
-        GPIO.output(self.trigger_pin,GPIO.LOW)
+        GPIO.output(self.uss["triggerpin"],GPIO.LOW)
 
         # Determine when the ping starts
         echo_start = time.time()
-        while GPIO.input(self.echo_pin) == 0:
+        while GPIO.input(self.uss["echopin"]) == 0:
             echo_start = time.time()
         
         # wait until ping ends
-        while GPIO.input(self.echo_pin) == 1:
+        while GPIO.input(self.uss["echopin"]) == 1:
             echo_stop = time.time()
 
         # turn off the echo to get rid of the occassional hang
-        GPIO.output(self.trigger_pin,GPIO.LOW)
+        GPIO.output(self.uss["triggerpin"],GPIO.LOW)
 
         echo_duration = echo_stop - echo_start
 
