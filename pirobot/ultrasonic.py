@@ -61,7 +61,7 @@ class Ultrasonic:
         # Initialize to no echoing
         GPIO.output(self.uss["triggerpin"],GPIO.LOW)
 
-    def GetDistance(self):
+    def GetDistanceUsonic(self):
         """Returns a float with the distance"""
         GPIO.output(self.uss["triggerpin"],GPIO.HIGH)
         time.sleep(self.trigger_time)
