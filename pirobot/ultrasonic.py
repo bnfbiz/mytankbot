@@ -23,13 +23,18 @@ class Ultrasonic:
     UNITS_CM = "cm"
     UNITS_IN = "in"
 
-    def __init__(self):
+    def __init__(self, robot):
         """Constructor
         
         Initialize the Ultrasonic class, currently takes no inputs
         """
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setwarnings(False)
+        try:
+            if not robot.isInitialized():
+                print("The robot is not initialized!")
+                sys.exit(1)
+        except:
+            print("The robot is not initialized")
+            sys.exit(1)
 
     def __del__(self):
         """Destructor
