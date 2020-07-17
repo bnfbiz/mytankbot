@@ -29,9 +29,9 @@ ultrasonic.init_us(ultrasonic_sensor, ultrasonic.DEFAULT_TRIGGER_TIME, ultrasoni
 # Setup the Servo Motor for the ultrasonic Sensor
 us_servo = servo.Servo(robot, ultrasonic_servo)
 
-# Setup the line sensor
-line = linesensor.LineSensor(robot)
-line.init_line_sensor(line_sensor)
+# # Setup the line sensor
+# line = linesensor.LineSensor(robot)
+# line.init_line_sensor(line_sensor)
 
 # Setup the camera mount
 camera_lr = servo.Servo(robot, camera_servo_lr)
@@ -61,7 +61,7 @@ try:
 
         if angle >= ultrasonic_servo["maxDegrees"]:
             count_up = False
-        elif angle < 0:
+        elif angle <= 0:
             count_up = True
 
         if count_up:
@@ -70,7 +70,7 @@ try:
             angle -= 1
 
         distance = ultrasonic.GetDistanceUsonic()
-        print("Distance is " + str(distance))
+        # print("Distance is " + str(distance))
         if distance > 200:
             redLed.setLED(True)
             greenLed.setLED(False)
