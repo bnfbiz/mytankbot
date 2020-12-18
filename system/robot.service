@@ -1,0 +1,17 @@
+# Service file to start the robot program on boot
+# sudo cp system/robot.service /etc/systemd/user
+# sudo systemctl daemon-reload
+# sudo systemctl show robot.service
+[Unit]
+Description=Pi Robot Program
+After=network.target
+
+[Service]
+ExecStart=env /usr/bin/python3 ./tankbot.py
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/code/mytankbot
+
+[Install]
+WantedBy=multi-user.target
