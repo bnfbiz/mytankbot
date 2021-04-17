@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import serial
 import time
 from pirobot import joystick, robot, solenoid
@@ -17,7 +19,7 @@ if __name__ == '__main__':
     ser.flush()
     left_y_axis = 90
     right_y_axis = 90
-    data="P03 90 P05 90 P09 90"
+    data="P03 90 P05 90 P09 90 P10 90"
     l_data = "P03 90"
     r_data = ""
     count = 0
@@ -39,11 +41,15 @@ if __name__ == '__main__':
                 
             if (new_left_y_axis != left_y_axis):
                 left_y_axis = new_left_y_axis
-                l_data ="P03 " + str(int(left_y_axis))
+                # invert the motors
+                inverted = abs(180 - int(left_y_axis))
+                l_data ="P03 " + str(inverted)
+                l_data +=" P05 " + str(inverted)
                 count = 0
             if (new_right_y_axis != right_y_axis):
                 right_y_axis = new_right_y_axis
-                r_data ="P05 " + str(int(right_y_axis))
+                r_data ="P09 " + str(int(right_y_axis))
+                r_data +=" P10 " + str(int(right_y_axis))
                 count = 0
 
             if (count == 0):
