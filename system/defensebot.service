@@ -1,0 +1,20 @@
+# Service file to start the robot program on boot
+# sudo cp system/defensebot.service /etc/systemd/system
+# sudo systemctl daemon-reload
+# sudo systemctl show defensebot.service
+# sudo systemctl enable defensebot.service
+# sudo systemctl start defensebot.service
+# sudo systemctl status defensebot.service
+[Unit]
+Description=DefenseBot Pi Robot Program
+After=network.target
+
+[Service]
+ExecStart=env /usr/bin/python3 ./defensebot.py
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/Documents/mytankbot
+
+[Install]
+WantedBy=multi-user.target
